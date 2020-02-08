@@ -1,0 +1,62 @@
+﻿@model IEnumerable<BusinessObject.TUrl>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <br /><br />
+<h2>List of all approve URLs</h2>
+
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+           @Html.ActionLink("UrlTitle", "Index", new { SortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")), SortBy = "Title" })
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UrlLink)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UrlDesc)
+        </th>
+        
+        <th>
+           
+
+            @Html.ActionLink("Category", "Index", new { SortOrder = (ViewBag.SortOrder == null ? "Asc" : (ViewBag.SortOrder == "Asc" ? "Desc" : "Asc")), SortBy = "Category" })
+
+        </th>
+        <th>
+           Submitted By
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UrlTitle)
+        </td>
+        <td>
+            <a target="_blank" href="@item.UrlLink">@item.UrlLink</a>
+           
+        </td>
+        <td>
+           
+            @Html.DisplayFor(modelItem => item.UrlDesc)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.TCategory.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TUser.FirstName)
+        </td>
+        
+    </tr>
+}
+
+</table>
+    </div>

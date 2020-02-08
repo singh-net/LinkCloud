@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">LinkCloud</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav mr-auto">
+
+                    <li class="nav-item">@Html.ActionLink("Home", "Index", new { Controller = "Home", Area = "Common" }, new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Browse URL", "Index", new { Controller = "BrowseURLs", Area = "Common" }, new { @class = "nav-link" })</li>
+
+                    <li class="nav-item">@Html.ActionLink("Quick URL Submit", "Index", new { Controller = "QuickURL", Area = "Common" }, new { @class = "nav-link" })</li>
+
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+
+
+
+                        <li class="nav-item">@Html.ActionLink("Submit URL", "Index", new { Controller = "URL", Area = "User" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("SignOut", "SignOut", new { Controller = "Login", Area = "Security" }, new { @class = "nav-link" })</li>
+
+
+                        if (User.IsInRole("A"))
+                        {
+
+
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    @Html.ActionLink("List Users", "Index", new { Controller = "ListUser", Area = "Admin" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("List Categories", "Index", new { Controller = "ListCategory", Area = "Admin" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Add Categories", "Index", new { Controller = "Category", Area = "Admin" }, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Approve URLs", "Index", new { Controller = "ApproveURLs", Area = "Admin" }, new { @class = "dropdown-item" })
+
+                                </div>
+                            </li>
+
+
+                        }
+
+
+                    }
+                    else
+                    {
+                        <li class="nav-item">@Html.ActionLink("SignIn", "Index", new { Controller = "Login", Area = "Security" }, new { @class = "nav-link" })</li>
+                        <li class="nav-item">@Html.ActionLink("Register", "Index", new { Controller = "Register", Area = "Security" }, new { @class = "nav-link" })</li>
+
+                    }
+
+
+
+
+                </ul>
+
+            </div>
+            </div>
+    </nav>
+
+    
+    
+
+    <div class="">
+        @RenderBody()
+        <hr />
+        <footer class="container">
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

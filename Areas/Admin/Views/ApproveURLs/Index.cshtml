@@ -1,0 +1,201 @@
+﻿@model IEnumerable<BusinessObject.TUrl>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+<script>
+    function ConfrimAction() {
+        confirm("Are You Sure!");
+
+    }
+
+</script>
+
+<script>
+    $(document).ready(function myfunction() {  
+        
+
+        $(document).ajaxStart(function () {
+            $("#loading").show();
+
+        });
+
+        $(document).ajaxStop(function () {
+            $("#loading").hide();
+
+        });
+
+        BindSelectAll();
+
+        $("#btnApprove").click(function () {
+
+            
+            
+            checkedIds = $(".ckb").filter(":checked").map(function () {
+                return this.id;
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ApproveOrRejectAll", "ApproveURLs")",
+                traditial: true,
+                data: { Ids: checkedIds.toArray(), Status: "A", CurrentStatus: "@ViewBag.Status" },
+                success: successFun,
+                error: errorFunc
+
+            });
+
+
+            function successFun(data, status) {
+
+                $("#viewdata").html(data);
+                BindSelectAll();
+               
+                
+            }
+            function errorFunc() {
+                alert("error");
+            }
+
+        });
+
+        $("#btnReject").click(function () {
+            checkedIds = $(".ckb").filter(":checked").map(function () {
+                return this.id;
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("ApproveOrRejectAll", "ApproveURLs")",
+                traditial: true,
+                data: { Ids: checkedIds.toArray(), Status: "R" , CurrentStatus: "@ViewBag.Status"},
+                success: successFun,
+                error: errorFunc
+
+            });
+
+
+            function successFun(data, status) {
+               
+                $("#viewdata").html(data);
+                BindSelectAll();
+            }
+            function errorFunc() {
+                alert("error");
+            }            
+
+        });
+
+        function BindSelectAll() {
+                 $("#selectall").click(function (event) { //on  click
+
+            if (this.checked) {
+                $('.ckb').each(function () {
+                    this.checked = true;
+
+                });
+            }
+            else {
+                $('.ckb').each(function () {
+                    this.checked = false;
+
+                });
+            }
+
+        });
+            }
+
+
+    });
+</script>
+
+
+
+<div class="container">
+    <br /><br />
+    <h2>Manage URLs</h2>
+
+    <p>
+
+        <br />
+
+        @if (ViewBag.Status == "P")
+        {
+            <b>
+                @Html.ActionLink("Pending URLs", "Index", new { status = "P" })
+            </b>
+        }
+        else
+        {
+            @Html.ActionLink("Pending URLs", "Index", new { status = "P" })
+        }
+
+        @if (ViewBag.Status == "A")
+        {
+            <b>
+                @Html.ActionLink(" Approved URLs", "Index", new { status = "A" })
+            </b>
+        }
+        else
+        {
+            @Html.ActionLink(" Approve URLs", "Index", new { status = "A" })
+        }
+
+        @if (ViewBag.Status == "R")
+        {
+            <b>
+                @Html.ActionLink(" Rejected URLs", "Index", new { status = "R" })
+            </b>
+        }
+        else
+        {
+            @Html.ActionLink(" Rejected URLs", "Index", new { status = "R" })
+        }
+
+
+    </p>
+
+
+
+    <div id="viewdata">
+
+        @Html.Partial("_ApproveURLs", Model)
+
+    </div>
+
+    
+
+    <input type="button" id="btnApprove" value="Approve" class="btn btn-primary" />
+    <input type="button" id="btnReject" value="Reject" class="btn btn-danger" />
+
+
+
+</div>
+
+
+
+<div class="modal" id="loading">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Loading...</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
